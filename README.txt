@@ -1,1 +1,1 @@
-This is the repository for the Group Ten 3155 Scheduling Application Project
+This is an event schedluing application built during my ITCS-3155 Software Engineering class at UNC Charlotte. My 4 teammates and I built this application over the semester. This app was built using HTML, CSS, and Python, utilizing the Flask web framework and a SQL database.
