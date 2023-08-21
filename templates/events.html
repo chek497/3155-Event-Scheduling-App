@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="UNCC Events App">
+        <title>UNCC Events App - View your Events</title>
+        <!-- styles -->
+         <link rel="stylesheet" href='static/main.css'>
+         <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+
+    </head>
+    <body>
+       <div class="nav-table">
+            <nav>
+
+                        <a href="{{ url_for('index') }}"> Home</a>
+                        <a href="{{ url_for('get_events') }}">Events</a>
+                        <a href="{{ url_for('search') }}">Search</a>
+                        <a href="{{ url_for('new_event') }}">Create</a>
+                        <a href="{{ url_for('get_friends') }}">Friends</a>
+
+                    {% if user %}
+
+                        <a href="{{ url_for('logout')}}">Logout</a>
+
+                    {% else %}
+
+                        <a href="{{ url_for('login') }}">Sign In</a>
+                        <a href="{{ url_for('register') }}">Register</a>
+                    {% endif %}
+            </nav>
+        </div>
+        <h1>Welcome {{user}} to the event listings!</h1>
+
+        <h2>My Events</h2>
+
+        {% if events %}
+        <table class="EventsTable">
+            <tr>
+                <th>Event ID</th>
+                <th>Want to share?</th>
+                <th >Event Title</th>
+                <th >Event Start Date</th>
+                <th >Event End Date</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+
+             {% for event in events %}
+
+            <tr>
+                <td id="eventId_{{event.id}}">Event ID: {{event.id}}</td>
+
+                <td><a href="{{ url_for('share', event_id=event.id) }}">
+                       <input type="submit" value="Share"/>
+                </a></td>
+
+                <td ><a id=eventName href="{{ url_for('get_event', event_id=event.id) }}">{{ event.event_name }}</a></td>
+                <td  type="date" >{{ event.start_date }}</td>
+                <td  type="date" >{{ event.end_date }}</td>
+                <td>
+                         <a href="{{ url_for('update_event', event_id=event.id)}}">
+                             <input type="submit" value="Edit"/>
+                         </a>
+                </td>
+                <td>
+                    <form action="{{ url_for('delete_event', event_id=event.id) }}" method="post">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+
+            {% endfor %}
+            {% endif %}
+        </table>
+
+        <br>
+
+        <h2 class="publicEvents">Public Events From Other Users</h2>
+         {% if public_events %}
+       <table class="EventsTable">
+
+             <tr>
+                <th >Event Title</th>
+                <th >Event Start Date</th>
+                <th >Event End Date</th>
+                 <th>RSVP</th>
+                 <th>Rate the event</th>
+             </tr>
+
+{% for public_event in public_events %}
+           <tr>
+                <td><a href="{{ url_for('get_event', event_id=public_event.id) }}">{{ public_event.event_name }}</a></td>
+                <td>{{ public_event.start_date }}</td>
+                <td>{{ public_event.end_date }}</td>
+               <td>
+                   <a href="{{ url_for('rsvp', event_id=public_event.id) }}">
+                       <input type="submit" value="RSVP"/>
+                   </a>
+               </td>
+               <td>
+                   <a href="{{ url_for('rate', event_id=public_event.id) }}">
+                       <input type="submit" value="Rate This Event"/>
+                   </a>
+               </td>
+           </tr>
+             {% endfor %}
+             {% endif %}
+
+       </table>
+
+       <h2>Invited Events</h2>
+       <table class="EventsTable">
+             <tr>
+                <th >Event Title</th>
+                <th >Event Start Date</th>
+                <th >Event End Date</th>
+                <th>RSVP</th>
+                 <th>Rate the event</th>
+             </tr>
+
+             {% for invited_event in invited_events %}
+           <tr>
+                <td><a href="{{ url_for('get_event', event_id=invited_event.id) }}">{{ invited_event.event_name }}</a></td>
+                <td>{{ invited_event.start_date }}</td>
+                <td>{{ invited_event.end_date }}</td>
+               <td>
+                   <a href="{{ url_for('rsvp', event_id=invited_event.id) }}">
+                       <input type="submit" value="RSVP"/>
+                   </a>
+               </td>
+               <td>
+                   <a href="{{ url_for('rate', event_id=invited_event.id) }}">
+                       <input type="submit" value="Rate This Event"/>
+                   </a>
+               </td>
+           </tr>
+             {% endfor %}
+
+
+        </table>
+
+    </body>
+</html>
